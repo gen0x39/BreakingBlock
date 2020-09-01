@@ -37,6 +37,12 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Altseed2": {
+              "target": "Package",
+              "version": "[2.0.0-beta3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

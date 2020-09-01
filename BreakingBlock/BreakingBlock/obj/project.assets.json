@@ -1,11 +1,55 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {}
+    ".NETCoreApp,Version=v3.1": {
+      "Altseed2/2.0.0-beta3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/Altseed2.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/Altseed2.dll": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/netstandard2.1/libAltseed2_Core": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-x64/native/netstandard2.1/libAltseed2_Core.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-x64/native/netstandard2.1/Altseed2_Core.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          }
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Altseed2/2.0.0-beta3": {
+      "sha512": "PuxHSXbrFD6m20gBl+GrZn4VuktCwWRKGWWhv3q2zJe4BFWgqffhAy6g9rSU02SP8IXrAQDYF3yk1lGmgdMELQ==",
+      "type": "package",
+      "path": "altseed2/2.0.0-beta3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "altseed2.2.0.0-beta3.nupkg.sha512",
+        "altseed2.nuspec",
+        "lib/netstandard2.1/Altseed2.dll",
+        "lib/netstandard2.1/Altseed2.xml",
+        "runtimes/linux-x64/native/netstandard2.1/libAltseed2_Core",
+        "runtimes/osx-x64/native/netstandard2.1/libAltseed2_Core.dylib",
+        "runtimes/win-x64/native/netstandard2.1/Altseed2_Core.dll"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": []
+    ".NETCoreApp,Version=v3.1": [
+      "Altseed2 >= 2.0.0-beta3"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\shinji\\.nuget\\packages\\": {}
@@ -43,6 +87,12 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "dependencies": {
+          "Altseed2": {
+            "target": "Package",
+            "version": "[2.0.0-beta3, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",

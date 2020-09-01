@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "/OKHUGHuajTQLoTd3DV2eq2R7rXNZo2U6Iyn4wvmuqsNMF+dV3Lrxq4nK2OITaSrL1Vcj1/iLZbwezeCnrLvYQ==",
+  "dgSpecHash": "SVEq2G5RcSeVqgNRYM5Wnl9XOzhWKzQT0BiQHCmVh5x6ETGGQ+N2xKIxtGU4MC1LIsJLpB546k5tlUEFUmxvHQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\shinji\\source\\repos\\BreakingBlock\\BreakingBlock\\BreakingBlock\\BreakingBlock.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\shinji\\.nuget\\packages\\altseed2\\2.0.0-beta3\\altseed2.2.0.0-beta3.nupkg.sha512"
+  ],
   "logs": []
 }

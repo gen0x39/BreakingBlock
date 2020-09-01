@@ -1,0 +1,58 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "BreakingBlock/1.0.0": {
+        "dependencies": {
+          "Altseed2": "2.0.0-beta3"
+        },
+        "runtime": {
+          "BreakingBlock.dll": {}
+        }
+      },
+      "Altseed2/2.0.0-beta3": {
+        "runtime": {
+          "lib/netstandard2.1/Altseed2.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/linux-x64/native/netstandard2.1/libAltseed2_Core": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/osx-x64/native/netstandard2.1/libAltseed2_Core.dylib": {
+            "rid": "osx-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/netstandard2.1/Altseed2_Core.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BreakingBlock/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Altseed2/2.0.0-beta3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-PuxHSXbrFD6m20gBl+GrZn4VuktCwWRKGWWhv3q2zJe4BFWgqffhAy6g9rSU02SP8IXrAQDYF3yk1lGmgdMELQ==",
+      "path": "altseed2/2.0.0-beta3",
+      "hashPath": "altseed2.2.0.0-beta3.nupkg.sha512"
+    }
+  }
+}
