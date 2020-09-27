@@ -10,13 +10,10 @@ namespace BlockShoot
         static void Main(string[] args)
         {
             // エンジンを初期化
-            Engine.Initialize("Tutorial", 1280, 960);
+            Engine.Initialize("BreakingBlocks", 1280, 960);
 
             // タイトル画面をエンジンに追加
             Engine.AddNode(new TitleNode());
-
-            // メイン画面をエンジンに追加
-            //Engine.AddNode(new MainNode());
 
             // メインループ
             while (Engine.DoEvents())

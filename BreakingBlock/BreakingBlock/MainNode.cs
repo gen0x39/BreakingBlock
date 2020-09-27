@@ -12,20 +12,28 @@ namespace BlockShoot
         private int? bgmID = null;
 
         // キャラクターを表示するノード
-        private Node characterNode = new Node();
-
-        // プレイヤーの参照
-        private Player player;
+        public Node characterNode = new Node();
 
         // スコアを表示するノード
         private TextNode scoreNode;
 
+        // Blockへの参照, Nodeだと子要素が読み取り専用なので
+        // HPを2倍にするときに使う
+        public List<Block> blockList = new List<Block>();
 
         // 他画面へ遷移しているかどうか
         private bool fading = false;
 
         // スコア
         public int score;
+
+        // 特殊なブロック(Speed, HP, Ball)への参照
+
+        public void AddBall()
+        {
+            var ball = new Ball(this, new Vector2F(1100, 915), 10.0f);
+            characterNode.AddChildNode(ball);
+        }
 
         // エンジンに追加された時に実行
         protected override void OnAdded()
@@ -40,20 +48,116 @@ namespace BlockShoot
             AddChildNode(uiNode);
 
             // 背景に使用するテクスチャ
-            var backTexture = new SpriteNode();
+            //var backTexture = new SpriteNode();
             // 背景のテクスチャを読み込む
-            backTexture.Texture = Texture2D.LoadStrict("Resources/Background.png");
+            //backTexture.Texture = Texture2D.LoadStrict("Resources/Background.png");
             // 表示位置を奥に設定
-            backTexture.ZOrder = -100;
+            //backTexture.ZOrder = -100;
 
             // 背景テクスチャを追加
-            AddChildNode(backTexture);
+            //AddChildNode(backTexture);
 
-            // プレイヤーを設定
-            var player = new Player(this, new Vector2F(350, 900));
+            // バーを設定
+            var bar = new Bar(this, new Vector2F(640, 900));
+            characterNode.AddChildNode(bar);
 
-            // キャラクターノードにプレイヤーを追加
-            characterNode.AddChildNode(player);
+            // ボールを設定
+            //var ball = new Ball(this, new Vector2F(1100, 915), 10.0f);
+            var ball = new Ball(this, new Vector2F(640, 850), 10.0f);
+            characterNode.AddChildNode(ball);
+
+            // ブロック崩しの高さと横幅
+            int height = 1;
+            int width = 10;
+            
+            // 特殊ブロックの配置を確認するための2次元配列
+            // この書き方だと任意の要素がFalseで初期化されていた
+            bool[,] isBlock = new bool[height, width];
+
+            // 重複しない2つの乱数を取り出したい
+            Random rand = new System.Random();
+
+            int len = height * width;
+            int[] numbers = new int[len];
+
+            // 0 ~ height * widthまでの並んだデータを作成
+            for (int i = 0; i < len; i++)
+            {
+                numbers[i] = i;
+            }
+
+            // シャッフル
+            for (int i = numbers.Length - 1; i > 0; i--)
+            {
+                int j = rand.Next(i + 1);
+                int tmp = numbers[i];
+                numbers[i] = numbers[j];
+                numbers[j] = tmp;
+            }
+
+            int blockKind = 3;  // ブロックの種類
+            int blockNum = 3;   // 各ブロックの個数
+            for (int i = 0; i < blockKind * blockNum; i++)
+            {
+                int index = numbers[i];
+                int h = index % height;
+                int w = index / width;
+                Console.WriteLine(string.Format("i : {0}, j : {1} index : {2}", h, w, index));
+                isBlock[h, w] = true;
+            }
+            var r = new Random();
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (!isBlock[i, j])
+                    {
+                        // HPを1～3までの範囲で設定
+                        int hp = r.Next(1, 4);
+                        //Console.WriteLine(hp);
+
+                        // ブロックの場所を設定
+                        float x = (j * 128 + 64);
+                        float y = (i * 30 + 15) + 10;
+
+                        var block = new Block(this, new Vector2F(x, y), hp);
+                        //blockList.Add(block);
+                        characterNode.AddChildNode(block);
+                        //Console.WriteLine(isBlock[i, j]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("hoge");
+                    }
+                }
+            }
+
+            for (int i = 0; i < blockKind * blockNum; i++)
+            {
+                int index = numbers[i];
+                int h = index % height;
+                int w = index / width;
+
+                float x = w * 128 + 64;
+                float y = h * 30 + 15 + 10;
+
+                string path;
+                if (i % blockKind == 0)
+                {
+                    path = "Resources/BallBlock.png";
+                }
+                else if (i % blockKind == 1)
+                {
+                    path = "Resources/SpeedBlock.png";
+                }
+                else
+                {
+                    path = "Resources/HpBlock.png";
+                }
+                var block = new SpecialBlock(this, new Vector2F(x, y), path, (i % blockKind));
+                characterNode.AddChildNode(block);
+            }
 
             // スコアを表示するノードを設定
             scoreNode = new TextNode();
@@ -88,25 +192,6 @@ namespace BlockShoot
             bgmID = Engine.Sound.Play(bgm);
         }
 
-        // カウンタ
-        private int counter = 0;
-
-        // フレーム毎に実行
-        private PointF[] positions =
-        {
-            new PointF(150, 150),
-            new PointF(250, 150),
-            new PointF(350, 150),
-            new PointF(450, 150),
-            new PointF(550, 150)
-        };
-
-        // フレーム毎に実行
-        /*
-         *   1. カウンタを作る
-         *   2. 一定時間たったらブロックを生成
-         *   3. 生成したブロックと今あるブロックを移動させる
-         */
         protected override void OnUpdate()
         {
             // スコア表示の更新
@@ -129,54 +214,7 @@ namespace BlockShoot
 
                     fading = true;
                 }
-
             }
-
-            //  1.  カウンタ
-            counter++;
-            if (counter % 100 == 0)
-            {
-                //  2. ブロックを2つ生成(違う場所)
-                List<int> indexs = new List<int>();
-
-                // 重複しない2つの乱数を取り出したい
-                for (int i = 0; i < 5; i++)
-                {
-                    indexs.Add(i);
-                }
-                Random r = new System.Random();
-                int index1 = r.Next(0, 5);
-                PointF p1 = positions[indexs[index1]];
-                indexs.RemoveAt(index1);
-                int index2 = r.Next(0, 4);
-                PointF p2 = positions[indexs[index2]];
-                var block1 = new Block(this, new Vector2F(p1.X, p1.Y), r.Next(1, 6));
-                characterNode.AddChildNode(block1);
-                var block2 = new Block(this, new Vector2F(p2.X, p2.Y), r.Next(1, 6));
-                characterNode.AddChildNode(block2);
-
-                //  3. ブロックを移動させる
-                Console.WriteLine(150);
-                //Console.WriteLine(counter);
-            }
-
         }
     }
-    
 }
-
-/*
- *   
-
-
-            // 自機
-            var line = new LineNode();
-            line.Point1 = new Vector2F(10.0f, 10.0f);
-            line.Point1 = new Vector2F(100.0f, 10.0f);
-            line.Thickness = 2.0f;
-
-
-            // 自機をエンジンに追加
-            Engine.AddNode(block);
-            Engine.AddNode(line);
- */

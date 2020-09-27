@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Altseed2;
 
 namespace BlockShoot
@@ -11,7 +12,11 @@ namespace BlockShoot
         public static HashSet<CollidableObject> objects = new HashSet<CollidableObject>();
 
         // コライダ
-        protected CircleCollider collider = CircleCollider.Create();
+        //protected CircleCollider collider = CircleCollider.Create();
+        protected RectangleCollider collider = RectangleCollider.Create();
+
+        public int kind;
+
 
         // OnUpdate内で衝突判定を調査するかどうか
         protected bool doSurvey;
@@ -20,17 +25,24 @@ namespace BlockShoot
         public MainNode mainNode;
 
         // コンストラクタ
-        public CollidableObject(MainNode mainNode, Vector2F position)
+        //public CollidableObject(MainNode mainNode, Vector2F position)
+        public CollidableObject(MainNode mainNode, int kind)
+
         {
+            this.kind = kind;
             // メインノードへの参照を設定
             this.mainNode = mainNode;
 
             // コライダの座標を設定
-            collider.Position = position;
+            //collider.Position = position.X - Texture.Size.X / 2, position.Y - Texture.S;
 
             // 座標を設定
-            Position = position;
         }
+
+        public void PositionChange(Vector2F position)
+        {
+            Position = position;
+        } 
 
         // エンジンに追加された時に実行
         protected override void OnAdded()
@@ -88,10 +100,17 @@ namespace BlockShoot
         protected void RemoveMyselfIfOutOfWindow()
         {
             var halfSize = Texture.Size / 2;
+            /*
             if (Position.X < -halfSize.X
                 || Position.X > Engine.WindowSize.X + halfSize.X
                 || Position.Y < -halfSize.Y
                 || Position.Y > Engine.WindowSize.Y + halfSize.Y)
+            */
+            /*
+            if (Position.Y < -halfSize.Y
+                || Position.Y > Engine.WindowSize.Y + halfSize.Y)
+            */
+            if ( Position.Y > Engine.WindowSize.Y + halfSize.Y)
             {
                 // 自身を削除
                 Parent?.RemoveChildNode(this);

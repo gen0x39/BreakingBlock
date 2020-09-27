@@ -9,83 +9,46 @@ namespace BlockShoot
     {
         // ブロックのHP
         protected int hp;
-
-        // プレイヤーへの参照
-        protected Player player;
-
         // コンストラクタ
-        public Block(MainNode mainNode, Vector2F position, int hp) : base(mainNode, position)
+        public Block(MainNode mainNode, Vector2F position, int hp) : base(mainNode, 100)
         {
             // 衝突判定を行うように設定
             doSurvey = true;
-
-            // 座標を設定
-            // Position = position;
 
             // ブロックのHPの設定
             this.hp = hp;
 
             // テクスチャの設定
-            switch (hp)
-            {
-                case 1:
-                    Texture = Texture2D.LoadStrict("Resources/block1.png");
-                    break;
+            String path = "Resources/Block" + hp.ToString() + ".png";
+            Texture = Texture2D.LoadStrict(path);
 
-                case 2:
-                    Texture = Texture2D.LoadStrict("Resources/block2.png");
-                    break;
-
-                case 3:
-                    Texture = Texture2D.LoadStrict("Resources/block3.png");
-                    break;
-
-                case 4:
-                    Texture = Texture2D.LoadStrict("Resources/block4.png");
-                    break;
-
-                default:
-                    Texture = Texture2D.LoadStrict("Resources/block5.png");
-                    break;
-            }
-
-            // コライダの半径を設定
-            collider.Radius = Texture.Size.Y / 2;
+            this.Position = position;
 
             // 中心座標を設定
             CenterPosition = ContentSize / 2;
+
+            // 短径コライダの幅・高さを設定
+            collider.Size = new Vector2F(Texture.Size.X, Texture.Size.Y);
         }
 
-        // カウンタ
-        private int counter = 0;
+        public void HpDouble()
+        {
+            hp *= Math.Max(hp, 8);
+            String path = "Resources/Block" + hp.ToString() + ".png";
+            Texture = Texture2D.LoadStrict(path);
+        }
 
         protected override void OnUpdate()
         {
-            counter++;
-            if (counter % 100 == 0)
-            {
-                //  3. ブロックを移動させる
-                Move();
-
-            }
             // CollidableOnjectのOnupdate呼び出し
             base.OnUpdate();
-        }
-
-        // プレイヤーの移動を行う
-        void Move()
-        {
-            if (Position.Y < 750)
-            {
-                Position += new Vector2F(0.0f, 100.0f);
-            }
         }
 
         // 衝突時に実行
         protected override void OnCollision(CollidableObject obj)
         {
             // 衝突対象が自機弾だったら
-            if (obj is Bullet)
+            if (obj is Ball)
             {
                 // スコアを加算
                 mainNode.score += 1;
@@ -109,28 +72,9 @@ namespace BlockShoot
                 }
                 else
                 {
-                    switch(hp)
-                    {
-                        case 1:
-                            Texture = Texture2D.LoadStrict("Resources/block1.png");
-                            break;
-
-                        case 2:
-                            Texture = Texture2D.LoadStrict("Resources/block2.png");
-                            break;
-
-                        case 3:
-                            Texture = Texture2D.LoadStrict("Resources/block3.png");
-                            break;
-
-                        case 4:
-                            Texture = Texture2D.LoadStrict("Resources/block4.png");
-                            break;
-
-                        default:
-                            Texture = Texture2D.LoadStrict("Resources/block5.png");
-                            break;
-                    }
+                    // HPが減ったのでテクスチャを変更
+                    String path = "Resources/Block" + hp.ToString() + ".png";
+                    Texture = Texture2D.LoadStrict(path);
                 }
             }
         }
